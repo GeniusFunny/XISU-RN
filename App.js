@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {View, Button, Text, ScrollView, Image, ImageBackground} from 'react-native';
+import {View, Button, Text, ScrollView, Image, ImageBackground, DatePickerIOS, Slider, Picker, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {COLOR, ThemeContext, getTheme} from 'react-native-material-ui'
+import {COLOR, ThemeContext, getTheme, Divider } from 'react-native-material-ui'
 import Score from './containers/Score'
 import {createDrawerNavigator, createStackNavigator, SafeAreaView, DrawerItems} from 'react-navigation'
 import ClassRoom from './containers/ClassRoom'
 import Schedule from './containers/Schedule'
+import API_URL from './api'
 
 const uiTheme = {
   palette: {
@@ -28,10 +29,26 @@ class App extends Component {
     headerRight: <Icon name={'person'} size={25} color={'#fff'} />,
     headerTintColor: '#fff'
   })
+  componentDidMount() {
+    fetch(API_URL.login, {
+      method: 'POST',
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: '123456',
+          password: '123456n'
+        })
+    })
+    .then(res => {
+      console.log(res)
+    })
+  }
   render() {
     return (
       <ThemeContext.Provider value={getTheme(uiTheme)}>
-
+        <Text>123</Text>
       </ThemeContext.Provider>
     );
   }
@@ -51,8 +68,8 @@ const DrawerContent = (props) => {
       <ImageBackground style={{height: 140, flex: 1, padding: 15}} source={require('./assets/imgs/material-8.png')}>
         <Image source={require('./assets/imgs/avatar.png')} style={{width: 60, height: 60, borderRadius: 30}}/>
         <View style={{fontSize: 20, marginTop: 15}}>
-          <Text style={{marginBottom: 5, color: '#fff'}}>杨航</Text>
-          <Text style={{color: '#fff'}}>16130120155</Text>
+          <Text style={{marginBottom: 5, color: '#fff'}}>李雨静</Text>
+          <Text style={{color: '#fff'}}>107242016001049</Text>
         </View>
       </ImageBackground>
       <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -66,20 +83,20 @@ export default createDrawerNavigator({
     screen: AppStatck,
     path: '/'
   },
-  Score: {
-    screen: Score,
-    path: '/score'
-  },
   ClassRoom: {
     screen: ClassRoom,
     path: '/classroom'
+  },
+  Score: {
+    screen: Score,
+    path: '/score'
   },
   Schedule: {
     screen: Schedule,
     path: '/schedule'
   }
 }, {
-  initialRouteName: 'ClassRoom',
+  initialRouteName: 'Home',
   drawerWidth: 250,
   contentComponent: DrawerContent,
   contentOptions: {

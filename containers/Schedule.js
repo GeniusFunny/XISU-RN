@@ -12,7 +12,6 @@ class Schedule extends React.Component {
     headerStyle: {
       backgroundColor: COLOR.blue500
     },
-    headerRight: 'Info',
     headerTintColor: '#fff'
   })
   render() {
