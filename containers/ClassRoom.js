@@ -1,7 +1,7 @@
 import {View, FlatList, Text, Modal, DatePickerIOS, Picker, TouchableHighlight, ScrollView, Button} from 'react-native'
 import React from 'react'
-import {getTheme, Snackbar, ThemeContext} from 'react-native-material-ui'
-import {List, Divider} from 'react-native-paper'
+import {getTheme, ThemeContext} from 'react-native-material-ui'
+import {List, Divider, Snackbar} from 'react-native-paper'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {createStackNavigator} from 'react-navigation'
 import API_URL from '../api'
@@ -134,7 +134,12 @@ class ClassRoom extends React.Component {
   render() {
     return (
       <ThemeContext.Provider value={getTheme(uiTheme)}>
-        <Snackbar message={'获取数据失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+        <Snackbar
+          onDismiss={() => this.setState({snackBarVisible: false})}
+          visible={this.state.snackBarVisible}
+        >
+          获取数据失败，网络异常
+        </Snackbar>
         <TouchableHighlight
           onPress={() => {
             this.setModalVisible(true)

@@ -1,14 +1,14 @@
-import {View, FlatList, Text, TouchableHighlight, Modal, ScrollView, Picker, Button, StyleSheet} from 'react-native'
+import {View, FlatList, Text, Modal, ScrollView, Picker, Button} from 'react-native'
 import React from 'react'
 import {List} from 'react-native-paper'
-import {Snackbar, ThemeContext, getTheme} from 'react-native-material-ui'
+import {ThemeContext, getTheme} from 'react-native-material-ui'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {createStackNavigator} from 'react-navigation'
 import API_URL from '../api'
 import uiTheme from '../config'
 import AppIcon from '../components/AppIcon'
 import AppText from '../components/AppText'
-import {Divider} from 'react-native-paper'
+import {Divider, Snackbar} from 'react-native-paper'
 import {SubTitle} from '../components/AppTitle'
 const styles = {
   listItem: {
@@ -141,19 +141,23 @@ class Score extends React.Component {
   render() {
     return (
       <ThemeContext.Provider value={getTheme(uiTheme)}>
-        <Snackbar message={'获取数据失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+        <Snackbar
+          onDismiss={() => this.setState({snackBarVisible: false})}
+          visible={this.state.snackBarVisible}
+        >
+          获取数据失败，网络异常
+        </Snackbar>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => <ScoreItem {...item}/>}
           keyExtractor={item => item.id}
         />
-        <TouchableHighlight
-          onPress={() => {
-            this.setModalVisible(true)
-          }}
-          style={styles.floatingWindow}>
-          <AppIcon name={'edit'}/>
-        </TouchableHighlight>
+        <View style={styles.floatingWindow}>
+          <AppIcon
+            name={'edit'}
+            onPress={() => this.setModalVisible(true)}
+          />
+        </View>
         <Modal
           animationType="slide"
           transparent={false}
