@@ -1,38 +1,73 @@
-import {View, FlatList, Text, TouchableHighlight, Modal, ScrollView, Picker, Button} from 'react-native'
+import {View, FlatList, Text, TouchableHighlight, Modal, ScrollView, Picker, Button, StyleSheet} from 'react-native'
 import React from 'react'
-import {ListItem, } from 'react-native-material-ui'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import {List} from 'react-native-paper'
+import {Snackbar, ThemeContext, getTheme} from 'react-native-material-ui'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import * as COLOR from 'react-native-material-ui/src/styles/colors'
 import {createStackNavigator} from 'react-navigation'
 import API_URL from '../api'
+import uiTheme from '../config'
+import AppIcon from '../components/AppIcon'
+import AppText from '../components/AppText'
+import {Divider} from 'react-native-paper'
+import {SubTitle} from '../components/AppTitle'
+const styles = {
+  listItem: {
+    leftElementContainer: {
+      borderRadius: 25,
+      width: 50,
+      height: 50,
+      backgroundColor: uiTheme.palette.primaryColor,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    leftElement: {
+      color: uiTheme.palette.FontColor
+    }
+  },
+  floatingWindow: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: uiTheme.palette.SecondaryColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 10,
+    bottom: 20,
+    zIndex: 999
+  },
+  modalContentContainer: {
+    marginTop: 22,
+    padding: 10
+  }
+}
 const ScoreItem = (props) => {
+  let term = props.year + (props.term === '1' ? ' 第一学期' : ' 第二学期')
   return (
-    <ListItem
-      divider
-      centerElement={{
-        primaryText: props.className,
-        secondaryText: props.year + (props.term === '1' ? ' 第一学期' : ' 第二学期') + ' ' + props.kind
-      }}
-      rightElement={
-        <View style={{borderRadius: 25, width: 50, height: 50, backgroundColor: COLOR.blue500, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: '#fff'}}>{props.score}</Text>
-        </View>
-      }
-    />
+    <View>
+      <List.Item
+        title={<AppText text={`${props.className} `}/>}
+        description={<AppText text={`${term} ${props.kind}`} style={{fontSize: uiTheme.fontSize.subText, color: uiTheme.palette.infoColor}}/>}
+        left={() => <View style={styles.listItem.leftElementContainer}>
+          <Text style={styles.listItem.leftElement}>{props.score}</Text>
+        </View>}
+      />
+      <Divider/>
+    </View>
   )
 }
 class Score extends React.Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: '我的成绩',
-    headerLeft: <Icon name={'menu'} size={25} color={'#fff'} onPress={() => navigation.toggleDrawer()}/>,
+    headerLeft: <AppIcon name={'menu'} onPress={() => navigation.toggleDrawer()}/>,
     headerStyle: {
-      backgroundColor: COLOR.blue500
+      backgroundColor: uiTheme.palette.primaryColor
     },
-    headerTintColor: '#fff'
+    headerTintColor: uiTheme.palette.FontColor
   })
   state = {
     modalVisible: false,
+    snackBarVisible: false,
     data: [],
     store: [],
     years: [],
@@ -56,6 +91,12 @@ class Score extends React.Component {
           kinds: Object.keys(kinds)
         })
       })
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          snackBarVisible: true
+        })
+      })
   }
 
   setModalVisible = visible => {
@@ -67,7 +108,6 @@ class Score extends React.Component {
     })
   }
   _scoreFilter = (year, term) => {
-    console.warn(year, term)
     this.setState(prev => {
       return {
         data: prev.store.filter(item => {
@@ -100,17 +140,19 @@ class Score extends React.Component {
   }
   render() {
     return (
-      <View>
+      <ThemeContext.Provider value={getTheme(uiTheme)}>
+        <Snackbar message={'获取数据失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => <ScoreItem {...item}/>}
+          keyExtractor={item => item.id}
         />
         <TouchableHighlight
           onPress={() => {
             this.setModalVisible(true)
           }}
-          style={{height: 50, width: 50, borderRadius: 25, backgroundColor: COLOR.pink500, justifyContent: 'center', alignItems: 'center', position: 'absolute', right: 50, bottom: 50, zIndex: 999 }}        >
-          <Icon name={'edit'} size={25} color={'#fff'} />
+          style={styles.floatingWindow}>
+          <AppIcon name={'edit'}/>
         </TouchableHighlight>
         <Modal
           animationType="slide"
@@ -120,9 +162,9 @@ class Score extends React.Component {
             alert("Modal has been closed.");
           }}
         >
-          <ScrollView style={{ marginTop: 22, padding: 10 }}>
+          <ScrollView style={styles.modalContentContainer}>
             <View>
-              <Text style={{fontSize: 18}}>选择学年</Text>
+              <SubTitle title={'选择学年'}/>
               <Picker
                 selectedValue={this.state.year}
                 onValueChange={this.setYear}
@@ -134,7 +176,7 @@ class Score extends React.Component {
                   ))
                 }
               </Picker>
-              <Text style={{fontSize: 18}}>选择学期</Text>
+              <SubTitle title={'选择学期'}/>
               <Picker
                 selectedValue={this.state.term}
                 onValueChange={this.setTerm}
@@ -151,7 +193,7 @@ class Score extends React.Component {
             </View>
           </ScrollView>
         </Modal>
-      </View>
+      </ThemeContext.Provider>
     )
   }
 }

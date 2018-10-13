@@ -1,39 +1,72 @@
 import {View, FlatList, Text, Modal, DatePickerIOS, Picker, TouchableHighlight, ScrollView, Button} from 'react-native'
 import React from 'react'
-import {ListItem} from 'react-native-material-ui'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import {getTheme, Snackbar, ThemeContext} from 'react-native-material-ui'
+import {List, Divider} from 'react-native-paper'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import * as COLOR from 'react-native-material-ui/src/styles/colors'
 import {createStackNavigator} from 'react-navigation'
 import API_URL from '../api'
+import uiTheme from '../config'
+import AppText from '../components/AppText'
+import {SubTitle} from '../components/AppTitle'
+import AppIcon from '../components/AppIcon'
+const styles = {
+  listItem: {
+    leftElementContainer: {
+      borderRadius: 25,
+      width: 50,
+      height: 50,
+      backgroundColor: uiTheme.palette.primaryColor,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    leftElement: {
+      color: uiTheme.palette.FontColor
+    }
+  },
+  floatingWindow: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: uiTheme.palette.SecondaryColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 10,
+    bottom: 20,
+    zIndex: 999
+  },
+  modalContentContainer: {
+    marginTop: 22,
+    padding: 10
+  }
+}
 const ClassRoomItem = (props) => {
   return (
-    <ListItem
-      divider
-      centerElement={{
-        primaryText: `${props.roomName}`,
-        secondaryText:`${props.date} ${props.time}`
-      }}
-      rightElement={
-        <View style={{ borderRadius: 25, width: 50, height: 50, backgroundColor: COLOR.blue500, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: '#fff'}}>{props.size}</Text>
-        </View>
-      }
-    />
+    <View>
+      <List.Item
+        title={<AppText text={`${props.location} ${props.roomName} ${props.type}`}/>}
+        description={<AppText text={`${props.date} ${props.time}`} style={{fontSize: uiTheme.fontSize.subText, color: uiTheme.palette.infoColor}}/>}
+        left={() => <View style={styles.listItem.leftElementContainer}>
+          <Text style={styles.listItem.leftElement}>{props.size}</Text>
+        </View>}
+      />
+      <Divider/>
+    </View>
   )
 }
 class ClassRoom extends React.Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: '空闲自习室',
-    headerLeft: <Icon name={'menu'} size={25} color={'#fff'} onPress={() => navigation.toggleDrawer()}/>,
+    headerLeft: <AppIcon name={'menu'} onPress={() => navigation.toggleDrawer()}/>,
     headerStyle: {
-      backgroundColor: COLOR.blue500
+      backgroundColor: uiTheme.palette.primaryColor
     },
-    headerTintColor: '#fff'
+    headerTintColor: uiTheme.palette.FontColor
   })
   state = {
     data: [],
     modalVisible: false,
+    snackBarVisible: false,
     date: new Date(),
     time: '14:00-18:00'
   }
@@ -61,6 +94,12 @@ class ClassRoom extends React.Component {
       .then(res => {
         this.setState({
           data: JSON.parse(res._bodyInit)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          snackBarVisible: true
         })
       })
   }
@@ -94,13 +133,14 @@ class ClassRoom extends React.Component {
   }
   render() {
     return (
-      <View style={{flex: 1}}>
+      <ThemeContext.Provider value={getTheme(uiTheme)}>
+        <Snackbar message={'获取数据失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
         <TouchableHighlight
           onPress={() => {
             this.setModalVisible(true)
           }}
-          style={{height: 50, width: 50, borderRadius: 25, backgroundColor: COLOR.pink500, justifyContent: 'center', alignItems: 'center', position: 'absolute', right: 50, bottom: 50, zIndex: 999 }}        >
-          <Icon name={'edit'} size={25} color={'#fff'} />
+          style={styles.floatingWindow}>
+          <AppIcon name={'edit'}/>
         </TouchableHighlight>
         <Modal
           animationType="slide"
@@ -110,16 +150,16 @@ class ClassRoom extends React.Component {
             alert("Modal has been closed.");
           }}
         >
-          <ScrollView style={{ marginTop: 22, padding: 10 }}>
+          <ScrollView style={styles.modalContentContainer}>
             <View>
-              <Text style={{fontSize: 18}}>选择日期</Text>
+              <SubTitle title={'选择日期'}/>
               <DatePickerIOS
                 onDateChange={this.setDate}
                 date={this.state.date}
                 mode={'date'}
                 minimumDate={new Date()}
               />
-              <Text style={{fontSize: 18}}>选择时间区间</Text>
+              <SubTitle title={'选择时间区间'}/>
               <Picker
                 selectedValue={this.state.time}
                 onValueChange={this.setTime}
@@ -140,8 +180,9 @@ class ClassRoom extends React.Component {
         <FlatList
           data={this.state.data}
           renderItem={({item}) => <ClassRoomItem {...item}/>}
+          keyExtractor={item => item.roomName}
         />
-      </View>
+      </ThemeContext.Provider>
     )
   }
 }

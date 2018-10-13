@@ -1,54 +1,76 @@
 import React, {Component} from 'react';
-import {View, Button, Text, ScrollView, Image, ImageBackground, DatePickerIOS, Slider, Picker, TextInput} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import {COLOR, ThemeContext, getTheme, Divider } from 'react-native-material-ui'
+import {View, Text, ScrollView, Image, ImageBackground} from 'react-native';
+import {ThemeContext, getTheme, Snackbar } from 'react-native-material-ui'
 import Score from './containers/Score'
 import {createDrawerNavigator, createStackNavigator, SafeAreaView, DrawerItems} from 'react-navigation'
 import ClassRoom from './containers/ClassRoom'
 import Schedule from './containers/Schedule'
 import API_URL from './api'
-
-const uiTheme = {
-  palette: {
-    primaryColor: COLOR.blue500
-  },
-  toolbar: {
-    container: {
-      height: 50
+import uiTheme from './config'
+import AppIcon from './components/AppIcon'
+const styles = {
+  drawer: {
+    background: {
+      height: 140,
+      flex: 1,
+      padding: 15
+    },
+    avatar: {
+      width: 60,
+      height: 60,
+      borderRadius: 30
+    },
+    personalInfoContainer: {
+      fontSize: 20,
+      marginTop: 15
+    },
+    user: {
+      marginBottom: 5,
+      color: uiTheme.palette.FontColor
+    },
+    id: {
+      color: uiTheme.palette.FontColor
     }
   }
 }
-
 class App extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: '主要',
-    headerLeft: <Icon name={'menu'} size={25} color={'#fff'} onPress={() => navigation.toggleDrawer()}/>,
+    headerLeft: <AppIcon name={'menu'} onPress={() => navigation.toggleDrawer()}/>,
     headerStyle: {
-      backgroundColor: COLOR.blue500
+      backgroundColor: uiTheme.palette.primaryColor
     },
-    headerRight: <Icon name={'person'} size={25} color={'#fff'} />,
-    headerTintColor: '#fff'
+    headerRight: <AppIcon name={'person'}/>,
+    headerTintColor: uiTheme.palette.FontColor
   })
-  componentDidMount() {
-    fetch(API_URL.login, {
-      method: 'POST',
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: '123456',
-          password: '123456n'
-        })
-    })
-    .then(res => {
-      console.log(res)
-    })
+  state = {
+    snackBarVisible: false
   }
+  // componentDidMount() {
+  //   fetch(API_URL.login, {
+  //     method: 'POST',
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({
+  //         username: 'test',
+  //         password: '123'
+  //       })
+  //   })
+  //   .then(res => {
+  //     console.log(res)
+  //   }).catch(err => {
+  //     console.log(err)
+  //     this.setState({
+  //       visible: true
+  //     })
+  //   })
+  // }
   render() {
     return (
       <ThemeContext.Provider value={getTheme(uiTheme)}>
-        <Text>123</Text>
+        <Snackbar message={'登陆失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
       </ThemeContext.Provider>
     );
   }
@@ -60,19 +82,19 @@ const AppStatck = createStackNavigator({
 })
 AppStatck.navigationOptions = {
   drawerLabel: '主要',
-  drawerIcon: <Icon name={'home'} size={24}/>
+  drawerIcon: <AppIcon name={'home'}/>
 }
 const DrawerContent = (props) => {
   return (
     <ScrollView>
-      <ImageBackground style={{height: 140, flex: 1, padding: 15}} source={require('./assets/imgs/material-8.png')}>
-        <Image source={require('./assets/imgs/avatar.png')} style={{width: 60, height: 60, borderRadius: 30}}/>
-        <View style={{fontSize: 20, marginTop: 15}}>
-          <Text style={{marginBottom: 5, color: '#fff'}}>李雨静</Text>
-          <Text style={{color: '#fff'}}>107242016001049</Text>
+      <ImageBackground style={styles.drawer.background} source={require('./assets/imgs/material-2.png')}>
+        <Image source={require('./assets/imgs/avatar.png')} style={styles.drawer.avatar}/>
+        <View style={styles.drawer.personalInfoContainer}>
+          <Text style={styles.drawer.user}>{props.user || 'GeniusFunny'}</Text>
+          <Text style={styles.drawer.id}>{props.id || 'geniusfunnyyh@gmail'}</Text>
         </View>
       </ImageBackground>
-      <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always', horizontal: 'never' }}>
+      <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
         <DrawerItems {...props} />
       </SafeAreaView>
     </ScrollView>
@@ -100,7 +122,7 @@ export default createDrawerNavigator({
   drawerWidth: 250,
   contentComponent: DrawerContent,
   contentOptions: {
-    activeTintColor: COLOR.blue500,
+    activeTintColor: uiTheme.palette.primaryColor,
     itemsContainerStyle: {
       marginVertical: 0,
     }
