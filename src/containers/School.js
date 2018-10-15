@@ -42,7 +42,9 @@ class School extends React.Component {
 export default createStackNavigator(
   {
     Home: School,
-    Score: Score,
+    Score: {
+      screen: Score
+    },
     EmptyClassroom: EmptyClassroom,
     CourseTable: CourseTable
   },
