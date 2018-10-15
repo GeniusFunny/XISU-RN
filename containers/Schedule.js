@@ -1,10 +1,10 @@
 import {View, FlatList} from 'react-native'
 import React from 'react'
-import {getTheme, Snackbar, ThemeContext} from 'react-native-material-ui'
+import {getTheme, ThemeContext} from 'react-native-material-ui'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import AppText from '../components/AppText'
 import {MainTitle} from '../components/AppTitle'
-import {Card} from 'react-native-paper'
+import {Card, Snackbar} from 'react-native-paper'
 import {createStackNavigator} from 'react-navigation'
 import API_URL from '../api'
 import uiTheme from '../config'
@@ -115,7 +115,12 @@ class Schedule extends React.Component {
     return (
       <ThemeContext.Provider value={getTheme(uiTheme)}>
         <View style={{backgroundColor: '#fff'}}>
-          <Snackbar style={{zIndex: 1000}} message={'获取数据失败，网络异常'} onRequestClose={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+          <Snackbar
+            onDismiss={() => this.setState({snackBarVisible: false})}
+            visible={this.state.snackBarVisible}
+          >
+            获取数据失败，网络异常
+          </Snackbar>
           <FlatList
             data={this.state.data}
             renderItem={({item}) => <ScheduleItem {...item}/>}

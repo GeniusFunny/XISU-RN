@@ -3,6 +3,6 @@ const baseUrl = 'http://localhost:1338'
 export default {
   login: baseUrl + '/login',
   score: baseUrl + '/score',
-  classroom: baseUrl + '/classroom',
-  schedule: baseUrl + '/courseTable'
+  emptyClassroom: baseUrl + '/classroom',
+  courseTable: baseUrl + '/courseTable'
 }
