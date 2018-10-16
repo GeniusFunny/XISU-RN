@@ -1,6 +1,10 @@
 import API_URLS from '../api/API_URLS'
 import {requestSuccess, requestFailed, requestBegin} from './request'
-import {FETCH_EMPTY_CLASSROOM, CHANGE_CLASSROOM_OPTIONS_DATE, CHANGE_CLASSROOM_OPTIONS_TIME} from '../actions'
+import {
+  CHANGE_CLASSROOM_OPTIONS_DATE,
+  CHANGE_CLASSROOM_OPTIONS_TIME,
+  RECEIVE_EMPTY_CLASSROOM_LIST
+} from '../actions'
 
 export function updateDate(date) {
   return {
@@ -16,7 +20,7 @@ export function updateTime(time) {
 }
 export function receiveEmptyClassroom(list) {
   return {
-    type: FETCH_EMPTY_CLASSROOM,
+    type: RECEIVE_EMPTY_CLASSROOM_LIST,
     list: list
   }
 }
