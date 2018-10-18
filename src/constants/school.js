@@ -24,11 +24,9 @@ export function fetchScore() {
   return dispatch => {
     dispatch(requestBegin())
     return fetch(API_URLS.score)
-      .then(res => {
-        dispatch(requestSuccess())
-        return JSON.parse(res._bodyInit)
-      })
+      .then(res => JSON.parse(res._bodyInit))
       .then(items => {
+        dispatch(requestSuccess())
         dispatch(receiveScore(items))
       })
       .catch(err => {

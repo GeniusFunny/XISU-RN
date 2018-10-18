@@ -52,11 +52,11 @@ export function fetchEmptyClassroom(date, time) {
       },
       body: JSON.stringify(data)
     })
-      .then(res => {
+      .then(res => JSON.parse(res._bodyInit))
+      .then(list => {
         dispatch(requestSuccess())
-        return JSON.parse(res._bodyInit)
+        dispatch(receiveEmptyClassroom(list))
       })
-      .then(list => dispatch(receiveEmptyClassroom(list)))
       .catch(err => {
         dispatch(requestFailed(err.message))
       })
