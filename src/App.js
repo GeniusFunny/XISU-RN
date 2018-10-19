@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { BottomNavigation, Text, Colors} from 'react-native-paper'
 import School from './containers/School'
-
-const MusicRoute = () => <Text>Music</Text>;
+import Home from './containers/Home'
+import Explore from './containers/Explore'
+import Person from './containers/Person'
 
 const AlbumsRoute = () => <Text>Albums</Text>;
 
@@ -10,7 +11,7 @@ const AlbumsRoute = () => <Text>Albums</Text>;
 const PurchasedRoute = () => <Text>Purchased</Text>;
 export default class App extends React.Component {
   state = {
-    index: 0,
+    index: 1,
     routes: [
       { key: 'home', title: 'Home', icon: 'home', color: '#3F51B5' },
       { key: 'explore', title: 'Explore', icon: 'explore', color: '#009688' },
@@ -22,10 +23,10 @@ export default class App extends React.Component {
   _handleIndexChange = index => this.setState({ index });
 
   _renderScene = BottomNavigation.SceneMap({
-    home: MusicRoute,
-    explore: AlbumsRoute,
+    home: Home,
+    explore: Explore,
     school: School,
-    person: PurchasedRoute
+    person: Person
   });
 
   render() {

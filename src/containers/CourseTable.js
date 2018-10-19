@@ -31,10 +31,10 @@ class CourseTable extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const {loading, list} = state.courseTable
+  const {loading, items} = state.courseTable
   return {
     loading: loading,
-    list: list
+    list: items
   }
 }
 

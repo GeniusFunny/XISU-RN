@@ -7,7 +7,8 @@ export function fetchCourseTable() {
     dispatch(requestBegin())
     fetch(API_URLS.courseTable)
       .then(res => {
-        return JSON.parse(res._initBody)
+        console.log(res)
+        return JSON.parse(res._bodyInit)
       })
       .then(list => {
         dispatch(requestSuccess())
