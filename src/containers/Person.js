@@ -24,11 +24,7 @@ const NavigateIcon = (props) => {
     <List.Icon color={Colors.teal200} {...props}/>
   )
 }
-class Person extends React.Component {
-  static navigationOptions = {
-    title: 'Person',
-    tabBarIcon: 'person'
-  }
+export default class Person extends React.Component {
   navigate = (key) => {
     this.props.navigation.navigate(key)
   }
@@ -57,20 +53,3 @@ class Person extends React.Component {
     )
   }
 }
-export default createStackNavigator(
-  {
-    Home: Person,
-    Score: Score,
-    EmptyClassroom: EmptyClassroom,
-    CourseTable: CourseTable
-  },
-  {
-    initRouteName: 'Home',
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: Colors.deepPurple500
-      },
-      headerTintColor: '#fff'
-    }
-  }
-)

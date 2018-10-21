@@ -1,7 +1,7 @@
 import React from 'react'
 import {Title} from 'react-native-paper'
 import {View} from 'react-native'
-import {createStackNavigator} from 'react-navigation'
+import {createStackNavigator, TabNavigator} from 'react-navigation'
 
 const styles = {
   root: {
@@ -9,9 +9,6 @@ const styles = {
   }
 }
 class Home extends React.Component {
-  static navigationOptions = {
-    title: 'Home'
-  }
   render() {
     return(
       <View style={styles.root}>
@@ -21,14 +18,4 @@ class Home extends React.Component {
   }
 }
 
-export default createStackNavigator({
-  Home: Home
-}, {
-  initialRouteName: 'Home',
-  navigationOptions: {
-    headerStyle: {
-      backgroundColor: '#3F51B5',
-    },
-    headerTintColor: '#fff'
-  }
-})
+export default Home

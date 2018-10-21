@@ -1,5 +1,6 @@
 import React from 'react'
-import {Snackbar, Button, TouchableRipple, Subheading, Colors} from 'react-native-paper'
+import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar} from 'react-native-paper'
+import {withNavigation} from 'react-navigation'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {Picker, FlatList, View, Modal, DatePickerIOS} from 'react-native'
@@ -7,7 +8,8 @@ import EmptyClassroomItem from '../components/EmptyClassroomItem'
 import store from '../stores/emptyClassroom'
 import {updateTime, updateDate, fetchEmptyClassroom} from '../constants/emptyClassroom'
 import WithStore from './WithStore'
-import emptyClassroom from '../reducers/emptyClassroom';
+import emptyClassroom from '../reducers/emptyClassroom'
+import Spinner from 'react-native-loading-spinner-overlay'
 const styles = {
   modalContainer: {
     padding: 10,
@@ -36,9 +38,6 @@ const styles = {
   }
 }
 class EmptyClassroom extends React.Component {
-  static navigationOptions = {
-    headerTitle: '空教室',
-  }
   state = {
     modalVisible: false,
     snackBarVisible: false
@@ -70,14 +69,24 @@ class EmptyClassroom extends React.Component {
   }
   render() {
     return (
-      <View>
-        <Snackbar message={'获取数据失败，网络异常'} onDismiss={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+      <View style={{flex: 1}}>
+      	<Appbar style={{backgroundColor: Colors.deepPurple500}}>
+        	<Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
+        	<Appbar.Content title="空教室" />
+      	</Appbar>
+      	<Spinner
+          visible={this.props.loading}
+          textContent={'Loading...'}
+        />
+        <Snackbar onDismiss={() => this.setState({snackBarVisible: false})} visible={this.props.error}>
+          {this.props.errMessage}
+        </Snackbar>
         <TouchableRipple
           onPress={() => {
             this.setModalVisible(true)
           }}
           rippleColor='rgba(0, 0, 0, .32)'
-          style={styles.floatingWindow}>
+          style={{...styles.floatingWindow, display: this.props.error ? 'none' : 'flex'}}>
           <Icon name={'edit'} size={22}/>
         </TouchableRipple>
         <Modal
@@ -126,13 +135,14 @@ class EmptyClassroom extends React.Component {
 }
 
 function mapStateToProps(state) {
-	console.log(state)
-  const {loading, list, date, time} = state.emptyClassroom
+  const {loading, list, date, time, error, errMessage} = state.emptyClassroom
   return {
     loading: loading,
     list: list,
     date: date,
-    time: time
+    time: time,
+    error: error,
+    errMessage: errMessage
   }
 }
-export default WithStore(connect(mapStateToProps)(EmptyClassroom), store)
+export default WithStore(connect(mapStateToProps)(withNavigation(EmptyClassroom)), store)

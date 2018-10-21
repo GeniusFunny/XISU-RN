@@ -8,6 +8,7 @@ import {
 function courseTable(state = {
   loading: false,
   items: [],
+  err: false
 }, action) {
   switch (action.type) {
     case REQUEST_BEGIN:
@@ -16,11 +17,13 @@ function courseTable(state = {
       })
     case REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        loading: action.loading
+        loading: action.loading,
+        error: false
       })
     case REQUEST_FAILED:
       return Object.assign({}, state, {
         loading: action.loading,
+        error: true,
         errMessage: action.errMessage
       })
     case RECEIVE_COURSE_TABLE:

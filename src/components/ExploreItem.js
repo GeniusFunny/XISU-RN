@@ -41,7 +41,6 @@ const styles = {
 }
 const NormalItem = (props) => {
   const images = props.items
-  console.log(props)
   return (
     <View style={styles.normalItem.root}>
       {

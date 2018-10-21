@@ -14,7 +14,8 @@ function score(state = {
   items: [],
   store: [],
   term: '全部',
-  year: '全部'
+  year: '全部',
+  error: false
 }, action) {
   switch (action.type) {
     case REQUEST_BEGIN:
@@ -23,12 +24,14 @@ function score(state = {
       })
     case REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        loading: action.loading
+        loading: action.loading,
+        error: false
       })
     case REQUEST_FAILED:
       return Object.assign({}, state, {
         loading: action.loading,
-        errMessage: action.errMessage
+        errMessage: action.errMessage,
+        error: true
       })
     case RECEIVE_SCORE_LIST:
       return Object.assign({}, state, {

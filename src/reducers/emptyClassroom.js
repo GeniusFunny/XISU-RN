@@ -11,7 +11,8 @@ function emptyClassroom(state = {
   loading: false,
   list: [],
   date: new Date(),
-  time: '14:00-18:00'
+  time: '14:00-18:00',
+  error: false
 }, action) {
   switch (action.type) {
     case REQUEST_BEGIN:
@@ -20,11 +21,13 @@ function emptyClassroom(state = {
       })
     case REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        loading: action.loading
+        loading: action.loading,
+        error: false
       })
     case REQUEST_FAILED:
       return Object.assign({}, state, {
         loading: action.loading,
+        error: true,
         errMessage: action.errMessage
       })
     case RECEIVE_EMPTY_CLASSROOM_LIST:

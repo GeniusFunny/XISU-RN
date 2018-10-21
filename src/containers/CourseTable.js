@@ -1,15 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Snackbar} from 'react-native-paper'
+import {Appbar, Snackbar, Colors} from 'react-native-paper'
 import {FlatList, View} from 'react-native'
+import {withNavigation} from 'react-navigation'
 import CourseTableItem from '../components/CourseTableItem'
 import WithStore from './WithStore'
 import store from '../stores/courseTable'
 import {fetchCourseTable} from '../constants/courseTable'
+import Spinner from 'react-native-loading-spinner-overlay'
 class CourseTable extends React.Component {
-  static navigationOptions = {
-    title: '课程表'
-  }
   state = {
     snackBarVisible: false
   }
@@ -19,8 +18,20 @@ class CourseTable extends React.Component {
   }
   render() {
     return (
-      <View>
-        <Snackbar message={'获取数据失败，网络异常'} onDismiss={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+      <View style={{flex: 1}}>
+        <Appbar style={{backgroundColor: Colors.deepPurple500}}>
+          <Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
+          <Appbar.Content title="我的课程"/>
+        </Appbar>
+        <Spinner
+          visible={this.props.loading}
+          textContent={'Loading...'}
+        />
+        <Snackbar
+          onDismiss={() => this.setState({snackBarVisible: false})} visible={this.props.error}
+        >
+          {this.props.errMessage}
+        </Snackbar>
         <FlatList
           data={this.props.list}
           renderItem={({item}) => <CourseTableItem {...item}/>}
@@ -31,12 +42,14 @@ class CourseTable extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const {loading, items} = state.courseTable
+  const {loading, items, error, errMessage} = state.courseTable
   return {
     loading: loading,
-    list: items
+    list: items,
+    error: error,
+    errMessage: errMessage
   }
 }
 
-export default WithStore(connect(mapStateToProps)(CourseTable), store)
+export default WithStore(connect(mapStateToProps)(withNavigation(CourseTable)), store)
 

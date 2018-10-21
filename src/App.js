@@ -1,42 +1,45 @@
 import * as React from 'react'
 import { BottomNavigation, Text, Colors} from 'react-native-paper'
-import School from './containers/School'
 import Home from './containers/Home'
+import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs'
+import {createStackNavigator, createSwitchNavigator} from 'react-navigation'
+import Icon from 'react-native-vector-icons/dist/MaterialIcons'
 import Explore from './containers/Explore'
 import Person from './containers/Person'
+import Score from './containers/Score'
+import EmptyClassroom from './containers/EmptyClassroom'
+import CourseTable from './containers/CourseTable'
 
-const AlbumsRoute = () => <Text>Albums</Text>;
-
-
-const PurchasedRoute = () => <Text>Purchased</Text>;
-export default class App extends React.Component {
-  state = {
-    index: 1,
-    routes: [
-      { key: 'home', title: 'Home', icon: 'home', color: '#3F51B5' },
-      { key: 'explore', title: 'Explore', icon: 'explore', color: '#009688' },
-      { key: 'school', title: 'School', icon: 'school', color: Colors.deepPurple500 },
-      { key: 'person', title: 'Person', icon: 'person', color: '#607D8B' },
-    ]
-  };
-
-  _handleIndexChange = index => this.setState({ index });
-
-  _renderScene = BottomNavigation.SceneMap({
-    home: Home,
-    explore: Explore,
-    school: School,
-    person: Person
-  });
-
-  render() {
-    return (
-      <BottomNavigation
-        navigationState={this.state}
-        onIndexChange={this._handleIndexChange}
-        renderScene={this._renderScene}
-        activeColor={'#fff'}
-      />
-    );
-  }
+Home.navigationOptions = {
+  headerTitle: <Text>123</Text>,
+  tabBarIcon: <Icon name={'home'} size={25} color={'#fff'}/>,
+  tabBarColor: '#3F51B5'
 }
+Explore.navigationOptions = {
+  tabBarColor: '#009688',
+  tabBarIcon: <Icon name={'explore'} size={25} color={'#fff'}/>
+}
+Person.navigationOptions = {
+  tabBarColor: Colors.deepPurple500,
+  tabBarIcon: <Icon name={'person'} size={25} color={'#fff'}/>
+}
+const TabStack = createMaterialBottomTabNavigator({
+  Home: Home,
+  Explore: Explore,
+  School: Person,
+  Person: Person
+}, {
+  initialRouteName: 'Home',
+  activeColor: '#fff',
+  inactiveColor: '#000'
+})
+const AppStack = createStackNavigator({
+  Tabs: TabStack,
+  Score: Score,
+  EmptyClassroom: EmptyClassroom,
+  CourseTable: CourseTable
+}, {
+  headerMode: 'none'
+})
+
+export default AppStack
