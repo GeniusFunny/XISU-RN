@@ -1,12 +1,14 @@
 import React from 'react'
-import {Snackbar, Button, TouchableRipple, Subheading, Colors} from 'react-native-paper'
+import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar} from 'react-native-paper'
 import {Picker, FlatList, View, Modal} from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import store from '../stores/school'
+import store from '../stores/score'
 import ScoreItem from '../components/ScoreItem'
 import WithStore from './WithStore'
-import {fetchScore, updateScore, updateTerm, updateYear} from '../constants/school'
+import {withNavigation} from 'react-navigation'
+import {fetchScore, updateScore, updateTerm, updateYear} from '../constants/score'
 const styles = {
   modalContainer: {
     padding: 10,
@@ -35,12 +37,8 @@ const styles = {
   }
 }
 class Score extends React.Component {
-  static navigationOptions = {
-    headerTitle: '我的成绩',
-  }
   state = {
-    modalVisible: false,
-    snackBarVisible: false,
+    modalVisible: false
   }
   componentDidMount() {
     const {dispatch} = this.props
@@ -68,8 +66,22 @@ class Score extends React.Component {
   }
   render() {
     return (
-      <View>
-        <Snackbar message={'获取数据失败，网络异常'} onDismiss={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+      <View style={{flex: 1}}>
+        <Appbar style={{backgroundColor: Colors.deepPurple500}}>
+          <Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
+          <Appbar.Content
+            title="我的成绩"
+          />
+        </Appbar>
+        <Spinner
+          visible={this.props.loading}
+          textContent={'Loading...'}
+        />
+        <Snackbar
+        onDismiss={() => this.setState({snackBarVisible: false})} visible={this.props.error}
+      >
+        {this.props.errMessage}
+      </Snackbar>
         <FlatList
           data={this.props.items}
           renderItem={({item}) => <ScoreItem {...item}/>}
@@ -80,7 +92,7 @@ class Score extends React.Component {
             this.setModalVisible(true)
           }}
           rippleColor='rgba(0, 0, 0, .32)'
-          style={styles.floatingWindow}>
+          style={{...styles.floatingWindow, display: this.props.error ? 'none' : 'flex'}}>
           <Icon name={'edit'} size={22}/>
         </TouchableRipple>
         <Modal
@@ -127,7 +139,7 @@ class Score extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const {items, loading, year, term, store} = state.score
+  const {items, loading, year, term, store, error, errMessage} = state.score
   const years = {}
   const terms = {}
   store.forEach(item => {
@@ -141,7 +153,9 @@ function mapStateToProps(state) {
     items: items,
     store: items,
     years: Object.keys(years),
-    terms: Object.keys(terms)
+    terms: Object.keys(terms),
+    error: error,
+    errMessage: errMessage
   }
 }
-export default WithStore(connect(mapStateToProps)(Score), store)
+export default WithStore(connect(mapStateToProps)(withNavigation(Score)), store)

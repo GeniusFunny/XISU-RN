@@ -3,7 +3,7 @@ import {Card, Text, Subheading} from 'react-native-paper'
 
 const CourseTableItem = (props) => {
   let icon = require('../../assets/imgs/material-10.png')
-  let iconIndex = props.index % 8
+  let iconIndex = props.id % 8
   switch (iconIndex) {
     case 1:
       icon = require('../../assets/imgs/material-1.png')

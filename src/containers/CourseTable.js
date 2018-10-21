@@ -1,40 +1,39 @@
 import React from 'react'
-import {Snackbar} from 'react-native-paper'
-import API_URLS from '../api/API_URLS'
+import {connect} from 'react-redux'
+import {Appbar, Snackbar, Colors} from 'react-native-paper'
 import {FlatList, View} from 'react-native'
+import {withNavigation} from 'react-navigation'
 import CourseTableItem from '../components/CourseTableItem'
-export default class CourseTable extends React.Component {
-  static navigationOptions = {
-    title: '课程表'
-  }
+import WithStore from './WithStore'
+import store from '../stores/courseTable'
+import {fetchCourseTable} from '../constants/courseTable'
+import Spinner from 'react-native-loading-spinner-overlay'
+class CourseTable extends React.Component {
   state = {
-    snackBarVisible: false,
-    data: []
+    snackBarVisible: false
   }
   componentDidMount() {
-    fetch(API_URLS.schedule)
-      .then(res => {
-        let data = JSON.parse(res._bodyInit).map((item, index) => ({
-          ...item,
-          index: index
-        }))
-        this.setState({
-          data: data
-        })
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          snackBarVisible: true
-        })
-      })
+    const {dispatch} = this.props
+    dispatch(fetchCourseTable())
   }
   render() {
     return (
-      <View>
-        <Snackbar message={'获取数据失败，网络异常'} onDismiss={() => this.setState({snackBarVisible: false})} visible={this.state.snackBarVisible}/>
+      <View style={{flex: 1}}>
+        <Appbar style={{backgroundColor: Colors.deepPurple500}}>
+          <Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
+          <Appbar.Content title="我的课程"/>
+        </Appbar>
+        <Spinner
+          visible={this.props.loading}
+          textContent={'Loading...'}
+        />
+        <Snackbar
+          onDismiss={() => this.setState({snackBarVisible: false})} visible={this.props.error}
+        >
+          {this.props.errMessage}
+        </Snackbar>
         <FlatList
-          data={this.state.data}
+          data={this.props.list}
           renderItem={({item}) => <CourseTableItem {...item}/>}
           keyExtractor={item => item.id}
         />
@@ -42,3 +41,15 @@ export default class CourseTable extends React.Component {
     )
   }
 }
+function mapStateToProps(state) {
+  const {loading, items, error, errMessage} = state.courseTable
+  return {
+    loading: loading,
+    list: items,
+    error: error,
+    errMessage: errMessage
+  }
+}
+
+export default WithStore(connect(mapStateToProps)(withNavigation(CourseTable)), store)
+

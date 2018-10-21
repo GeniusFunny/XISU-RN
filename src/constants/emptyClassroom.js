@@ -5,6 +5,8 @@ import {
   CHANGE_CLASSROOM_OPTIONS_TIME,
   RECEIVE_EMPTY_CLASSROOM_LIST
 } from '../actions'
+import {receiveCourseTable} from './courseTable'
+import {receiveScore} from './score'
 
 export function updateDate(date) {
   return {
@@ -52,11 +54,15 @@ export function fetchEmptyClassroom(date, time) {
       },
       body: JSON.stringify(data)
     })
+      .then(res => JSON.parse(res._bodyInit))
       .then(res => {
-        dispatch(requestSuccess())
-        return JSON.parse(res._bodyInit)
+        if (res.status === 0) {
+          dispatch(requestSuccess())
+          dispatch(receiveEmptyClassroom(res.data.items))
+        } else {
+          dispatch(requestFailed('服务器错误'))
+        }
       })
-      .then(list => dispatch(receiveEmptyClassroom(list)))
       .catch(err => {
         dispatch(requestFailed(err.message))
       })

@@ -1,18 +1,14 @@
 import {combineReducers} from 'redux'
 import {
-  CHANGE_CLASSROOM_OPTIONS_TIME,
-  CHANGE_CLASSROOM_OPTIONS_DATE,
-  RECEIVE_EMPTY_CLASSROOM_LIST,
-  REQUEST_SUCCESS,
+  REQUEST_BEGIN,
   REQUEST_FAILED,
-  REQUEST_BEGIN
+  REQUEST_SUCCESS,
+  RECEIVE_COURSE_TABLE
 } from '../actions'
-function emptyClassroom(state = {
+function courseTable(state = {
   loading: false,
-  list: [],
-  date: new Date(),
-  time: '14:00-18:00',
-  error: false
+  items: [],
+  err: false
 }, action) {
   switch (action.type) {
     case REQUEST_BEGIN:
@@ -30,22 +26,14 @@ function emptyClassroom(state = {
         error: true,
         errMessage: action.errMessage
       })
-    case RECEIVE_EMPTY_CLASSROOM_LIST:
+    case RECEIVE_COURSE_TABLE:
       return Object.assign({}, state, {
-        list: action.list
-      })
-    case CHANGE_CLASSROOM_OPTIONS_DATE:
-      return Object.assign({}, state, {
-        date: action.date
-      })
-    case CHANGE_CLASSROOM_OPTIONS_TIME:
-      return Object.assign({}, state, {
-        time: action.time
+        items: action.list,
       })
     default:
       return state
   }
 }
 export default combineReducers({
-  emptyClassroom
+  courseTable
 })
