@@ -10,9 +10,9 @@ const AuthStack = StackNavigator({
 })
 
 export default SwitchNavigator({
-  AuthLoading: AuthLoadingScreen,oo
+  AuthLoading: AuthLoadingScreen,
   Auth: AuthStack,
-  App: App,
+  App: App
 }, {
   initRouteName: 'AuthLoading',
   headerMode: 'none'

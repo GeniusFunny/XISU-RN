@@ -24,6 +24,10 @@ class Auth extends React.Component {
     dispatch(login(this.state.username, this.state.password))
   }
   render() {
+    const {login} = this.props
+    if (login) {
+      this.props.navigation.navigate('Home')
+    }
     return (
       <View style={{backgroundColor: '#fff', flex: 1}}>
         <Spinner
@@ -33,8 +37,8 @@ class Auth extends React.Component {
         <Snackbar visible={this.props.error} onDismiss={() => this.setState({snackBarVisible: false})}>
           {this.props.errMessage}
         </Snackbar>
-        <Image source={require('../../assets/imgs/material-10.png')} style={{width: 375, height: 300}}/>
-        <View style={{padding: 20, backgroundColor: '#fff', marginBottom: 30}}>
+        <Image source={require('../../assets/imgs/material-10.png')} style={{width: 375, height: 200}}/>
+        <View style={{padding: 20, backgroundColor: '#fff', marginBottom: 15}}>
           <TextInput
             label={'学号'}
             keyboardType={'numeric'}
@@ -49,20 +53,21 @@ class Auth extends React.Component {
             value={this.state.password}
             onChangeText={text => this._handleTextChange('password', text)}
           />
-          <Button onPress={() => this._login()}>
-            Login
-          </Button>
         </View>
+        <Button onPress={() => this._login()} style={{paddingLeft: 100, paddingRight: 100}}>
+          Login
+        </Button>
       </View>
     )
   }
 }
 const mapStateToProps = (state) => {
-  const {loading, error, errMessage} = state
+  const {loading, error, errMessage, login} = state
   return {
     loading: loading,
     error: error,
-    errMessage: errMessage
+    errMessage: errMessage,
+    login: login
   }
 }
 export default WithStore(connect(mapStateToProps)(withNavigation(Auth)), store)

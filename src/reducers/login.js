@@ -4,19 +4,20 @@ export default function login(state = {
   loading: false,
   data: {},
   error: false,
-  errMessage: ''
+  errMessage: '',
+  login: false
 }, action) {
   switch(action.type) {
     case REQUEST_BEGIN:
       return Object.assign({}, state, {loading: true})
     case REQUEST_FAILED:
-      return Object.assign({}, state, {loading: true, error: true, errMessage: action.errMessage})
+      return Object.assign({}, state, {loading: false, error: true, errMessage: action.errMessage})
     case REQUEST_SUCCESS:
-      return Object.assign({}, state, {loading: true})
+      return Object.assign({}, state, {loading: false})
     case LOGIN_FAILED:
-      return Object.assign({}, state, {errMessage: action.measure})
+      return Object.assign({}, state, {errMessage: action.measure, login: false})
     case LOGIN_SUCCESS:
-      return Object.assign({}, state, {data: action.data})
+      return Object.assign({}, state, {data: action.data, login: true})
     default:
       return state
   }
