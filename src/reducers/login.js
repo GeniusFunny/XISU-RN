@@ -15,7 +15,7 @@ export default function login(state = {
     case REQUEST_SUCCESS:
       return Object.assign({}, state, {loading: false})
     case LOGIN_FAILED:
-      return Object.assign({}, state, {errMessage: action.measure, login: false})
+      return Object.assign({}, state, {errMessage: action.errMessage, login: false})
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {data: action.data, login: true})
     default:

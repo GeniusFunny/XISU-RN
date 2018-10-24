@@ -1479,7 +1479,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.fucker;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.sucker;
 				PRODUCT_NAME = XISU;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1508,7 +1508,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.fucker;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.sucker;
 				PRODUCT_NAME = XISU;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
