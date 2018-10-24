@@ -28,7 +28,7 @@ export default class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <ImageBackground source={require('../../assets/imgs/bg.jpeg')} style={{width: 375, height: 750}}/>
+        <ImageBackground source={require('../../assets/imgs/cover.png')} style={{width: 375, height: 750}}/>
       </View>
     );
   }
