@@ -48,6 +48,7 @@ export function fetchEmptyClassroom(date, time) {
     let data = queryInfo(date, time)
     fetch(API_URLS.emptyClassroom, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"

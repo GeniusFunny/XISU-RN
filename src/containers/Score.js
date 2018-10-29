@@ -85,7 +85,7 @@ class Score extends React.Component {
         <FlatList
           data={this.props.items}
           renderItem={({item}) => <ScoreItem {...item}/>}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.courseId}
         />
         <TouchableRipple
           onPress={() => {

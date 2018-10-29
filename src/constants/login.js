@@ -19,6 +19,7 @@ export function login(username, password) {
     dispatch(requestBegin())
     fetch(API_URLS.login, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         "Content-Type": 'application/json'

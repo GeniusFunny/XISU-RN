@@ -1,17 +1,18 @@
 import React from 'react'
-import {View, ImageBackground} from 'react-native'
+import {View, ImageBackground, AsyncStorage} from 'react-native'
 import {connect} from 'react-redux'
-import {TextInput, Button, Snackbar, Title, Colors} from 'react-native-paper'
+import {TextInput, Button, Snackbar, Title} from 'react-native-paper'
 import {login} from '../constants/login'
 import {withNavigation} from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import WithStore from './WithStore'
 import store from '../stores/login'
+import {WIDTH, HEIGHT} from '../config'
 
 const styles = {
   root: {
-    width: 375,
-    height: 672,
+    width: WIDTH,
+    height: HEIGHT,
     justifyContent: 'center'
   },
   form: {

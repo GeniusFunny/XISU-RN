@@ -24,9 +24,13 @@ export function receiveScore(data) {
 export function fetchScore() {
   return dispatch => {
     dispatch(requestBegin())
-    return fetch(API_URLS.score)
+    return fetch(API_URLS.score, {
+      method: 'GET',
+      credentials: 'include'
+    })
       .then(res => JSON.parse(res._bodyInit))
       .then(res => {
+        console.log(res)
         if (res.status === 0) {
           dispatch(requestSuccess())
           dispatch(receiveScore(res.data.items))

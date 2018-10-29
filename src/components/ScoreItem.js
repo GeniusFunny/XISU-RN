@@ -18,7 +18,7 @@ const ScoreItem = (props) => {
   return (
     <>
       <List.Item
-        title={props.className}
+        title={props.courseName}
         description={term + props.kind}
         left={() => <View style={styles.leftElement}><Text>{props.score}</Text></View>}
       />

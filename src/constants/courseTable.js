@@ -6,11 +6,14 @@ import {receiveScore} from './score'
 export function fetchCourseTable() {
   return dispatch => {
     dispatch(requestBegin())
-    fetch(API_URLS.courseTable)
+    fetch(API_URLS.courseTable, {
+      credentials: 'include'
+    })
       .then(res => {
         return JSON.parse(res._bodyInit)
       })
       .then(res => {
+        console.log(res)
         if (res.status === 0) {
           dispatch(requestSuccess())
           dispatch(receiveCourseTable(res.data.items))

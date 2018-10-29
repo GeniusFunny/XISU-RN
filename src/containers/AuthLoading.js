@@ -1,18 +1,22 @@
-import React from 'react';
+import React from 'react'
 import {
-  ActivityIndicator,
   AsyncStorage,
-  StatusBar,
-  ImageBackground,
-  View,
-} from 'react-native';
+  Image,
+} from 'react-native'
+import {WIDTH, HEIGHT} from '../config/index'
 
+const styles = {
+  root: {
+    height: HEIGHT,
+    width: WIDTH
+  }
+}
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
     setTimeout(() => {
       this._bootstrapAsync()
-    }, 1500)
+    }, 3000)
   }
 
   // Fetch the token from storage then navigate to our appropriate place
@@ -27,9 +31,7 @@ export default class AuthLoadingScreen extends React.Component {
   // Render any loading content that you like here
   render() {
     return (
-      <View style={{flex: 1}}>
-        <ImageBackground source={require('../../assets/imgs/cover.png')} style={{width: 375, height: 750}}/>
-      </View>
+      <Image source={require('../../assets/imgs/cover.png')} style={styles.root}/>
     );
   }
 }
