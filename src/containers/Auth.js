@@ -52,8 +52,16 @@ class Auth extends React.Component {
   shouldComponentUpdate(nextProps) {
     if (nextProps.login) {
       nextProps.navigation.navigate('Profile')
+      this._storeUser(this.state.username)
     }
     return true
+  }
+  _storeUser = async (userId) => {
+    try {
+      await AsyncStorage.setItem('user', userId)
+    } catch (e) {
+      console.log(e)
+    }
   }
   _login = () => {
     const {dispatch} = this.props

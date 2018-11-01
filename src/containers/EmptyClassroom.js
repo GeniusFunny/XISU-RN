@@ -1,5 +1,5 @@
 import React from 'react'
-import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar} from 'react-native-paper'
+import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar, Text} from 'react-native-paper'
 import {withNavigation} from 'react-navigation'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -128,6 +128,7 @@ class EmptyClassroom extends React.Component {
           data={this.props.list}
           renderItem={({item}) => <EmptyClassroomItem {...item}/>}
           keyExtractor={item => item.roomName}
+          ListEmptyComponent={<Text>暂无数据</Text>}
         />
       </View>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Appbar, Snackbar, Colors} from 'react-native-paper'
+import {Appbar, Snackbar, Colors, Text} from 'react-native-paper'
 import {FlatList, View} from 'react-native'
 import {withNavigation} from 'react-navigation'
 import CourseTableItem from '../components/CourseTableItem'
@@ -36,6 +36,7 @@ class CourseTable extends React.Component {
           data={this.props.list}
           renderItem={({item}) => <CourseTableItem {...item}/>}
           keyExtractor={item => item.id}
+          ListEmptyComponent={<Text>暂无数据</Text>}
         />
       </View>
     )
