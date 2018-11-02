@@ -1,9 +1,8 @@
 import React from 'react'
 import {View, Image, ImageBackground, AsyncStorage} from 'react-native'
 import {List, Colors} from 'react-native-paper'
-import {createStackNavigator, createSwitchNavigator} from 'react-navigation'
 import Score from './Score'
-import EmptyClassroom from './EmptyClassroom'
+import EmptyClassroom from './Classroom'
 import CourseTable from './CourseTable'
 import {WIDTH} from '../config'
 
@@ -29,17 +28,6 @@ export default class Person extends React.Component {
   navigate = (key) => {
     this.props.navigation.navigate(key)
   }
-  _deleteCache = async () => {
-    try {
-      await AsyncStorage.removeItem('user')
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  loginOut = () => {
-    this._deleteCache()
-    this.navigate('Auth')
-  }
   render() {
     return (
       <View style={styles.root}>
@@ -64,7 +52,7 @@ export default class Person extends React.Component {
         <List.Item
           title={'退出'}
           left={() => <NavigateIcon icon="exit-to-app"/>}
-          onPress={() => this.loginOut()}
+          onPress={() => this.navigate('Auth')}
         />
       </View>
     )

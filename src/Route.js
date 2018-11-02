@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons'
 import Explore from './containers/Explore'
 import Person from './containers/Person'
 import Score from './containers/Score'
-import EmptyClassroom from './containers/EmptyClassroom'
+import EmptyClassroom from './containers/Classroom'
 import CourseTable from './containers/CourseTable'
 
 Explore.navigationOptions = {

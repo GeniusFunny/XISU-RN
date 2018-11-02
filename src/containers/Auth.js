@@ -44,21 +44,36 @@ class Auth extends React.Component {
     snackBarVisible: false,
     visible: false
   }
+  componentDidMount() {
+    setImmediate(async () => {
+      let username = await this._fetchUser()
+      this.setState({
+        username: username
+      })
+    })
+  }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.login) {
+      this._storeUser(this.state.username)
+      nextProps.navigation.navigate('Explore')
+    }
+    return true
+  }
   _handleTextChange = (name, value) => {
     this.setState({
       [name]: value
     })
   }
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.login) {
-      nextProps.navigation.navigate('Profile')
-      this._storeUser(this.state.username)
-    }
-    return true
-  }
-  _storeUser = async (userId) => {
+  _storeUser = async (username) => {
     try {
-      await AsyncStorage.setItem('user', userId)
+      await AsyncStorage.setItem('username', username)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  _fetchUser = async () => {
+    try {
+      return await AsyncStorage.getItem('username')
     } catch (e) {
       console.log(e)
     }
@@ -123,12 +138,13 @@ class Auth extends React.Component {
   }
 }
 const mapStateToProps = (state) => {
-  const {loading, error, errMessage, login} = state
+  const {loading, error, errMessage, login, data} = state
   return {
     loading: loading,
     error: error,
     errMessage: errMessage,
-    login: login
+    login: login,
+    data: data
   }
 }
 export default WithStore(connect(mapStateToProps)(withNavigation(Auth)), store)

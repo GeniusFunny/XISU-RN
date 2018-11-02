@@ -8,7 +8,6 @@ import EmptyClassroomItem from '../components/EmptyClassroomItem'
 import store from '../stores/emptyClassroom'
 import {updateTime, updateDate, fetchEmptyClassroom} from '../constants/emptyClassroom'
 import WithStore from './WithStore'
-import emptyClassroom from '../reducers/emptyClassroom'
 import Spinner from 'react-native-loading-spinner-overlay'
 const styles = {
   modalContainer: {
@@ -48,12 +47,12 @@ class EmptyClassroom extends React.Component {
   }
   setModalVisible = (visible) => {
     if (!visible) {
-       const {
-         dispatch,
-         date,
-         time
-       } = this.props
-       dispatch(fetchEmptyClassroom(date, time))
+      const {
+        dispatch,
+        date,
+        time
+      } = this.props
+      dispatch(fetchEmptyClassroom(date, time))
     }
     this.setState({
       modalVisible: visible
@@ -68,13 +67,14 @@ class EmptyClassroom extends React.Component {
     dispatch(updateTime(time))
   }
   render() {
+    console.log(this.props.loading)
     return (
       <View style={{flex: 1}}>
-      	<Appbar style={{backgroundColor: Colors.deepPurple500}}>
-        	<Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
-        	<Appbar.Content title="空教室" />
-      	</Appbar>
-      	<Spinner
+        <Appbar style={{backgroundColor: Colors.deepPurple500}}>
+          <Appbar.BackAction onPress={() => this.props.navigation.goBack()}/>
+          <Appbar.Content title="空教室" />
+        </Appbar>
+        <Spinner
           visible={this.props.loading}
           textContent={'Loading...'}
         />

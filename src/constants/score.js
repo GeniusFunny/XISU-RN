@@ -1,7 +1,7 @@
 import API_URLS from '../api/API_URLS'
+import request from '../api/request'
 import {requestBegin, requestFailed, requestSuccess} from './request'
 import {UPDATE_SCORE_LIST, RECEIVE_SCORE_LIST, CHANGE_SCORE_OPTIONS_YEAR, CHANGE_SCORE_OPTIONS_TERM} from '../actions/index'
-import {receiveCourseTable} from './courseTable'
 
 export function updateYear(year) {
   return {
@@ -24,9 +24,8 @@ export function receiveScore(data) {
 export function fetchScore() {
   return dispatch => {
     dispatch(requestBegin())
-    return fetch(API_URLS.score, {
-      method: 'GET',
-      credentials: 'include'
+    return request(API_URLS.score, {
+      method: 'GET'
     })
       .then(res => JSON.parse(res._bodyInit))
       .then(res => {
@@ -34,8 +33,10 @@ export function fetchScore() {
         if (res.status === 0) {
           dispatch(requestSuccess())
           dispatch(receiveScore(res.data.items))
-        } else {
+        } else if (res.status === 1) {
           dispatch(requestFailed('服务器错误'))
+        } else {
+          dispatch(requestFailed('认证失效，请重新登陆'))
         }
       })
       .catch(err => {
