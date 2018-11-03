@@ -71,6 +71,7 @@ export default class Explore extends React.Component {
           renderItem={({item, index}) => {
             return <ExploreItem data={item} index={index}/>
           }}
+          keyExtractor={(item, index) => index.toString()}
           style={styles.content}
           ListHeaderComponent={<View style={styles.header}>
             <Searchbar

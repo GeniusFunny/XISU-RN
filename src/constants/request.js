@@ -9,7 +9,7 @@ export function requestFailed(errMessage) {
   return {
     type: REQUEST_FAILED,
     loading: false,
-    errMessage: errMessage
+    errMessage: errMessage || '服务器宕机。。。'
   }
 }
 export function requestSuccess() {

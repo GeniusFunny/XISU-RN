@@ -1,15 +1,15 @@
 import React from 'react'
-import {View, Image, ImageBackground} from 'react-native'
+import {View, Image, ImageBackground, AsyncStorage} from 'react-native'
 import {List, Colors} from 'react-native-paper'
-import {createStackNavigator, createSwitchNavigator} from 'react-navigation'
 import Score from './Score'
-import EmptyClassroom from './EmptyClassroom'
+import EmptyClassroom from './Classroom'
 import CourseTable from './CourseTable'
+import {WIDTH} from '../config'
 
 const styles = {
   avatarContainer: {
-    height: 200,
-    width: 375,
+    height: 240,
+    width: WIDTH,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -48,6 +48,11 @@ export default class Person extends React.Component {
           title={'查询空教室'}
           left={() => <NavigateIcon icon="location-city"/>}
           onPress={() => this.navigate('EmptyClassroom')}
+        />
+        <List.Item
+          title={'退出'}
+          left={() => <NavigateIcon icon="exit-to-app"/>}
+          onPress={() => this.navigate('Auth')}
         />
       </View>
     )

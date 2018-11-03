@@ -1,5 +1,5 @@
 import React from 'react'
-import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar} from 'react-native-paper'
+import {Snackbar, Button, TouchableRipple, Subheading, Colors, Appbar, Text} from 'react-native-paper'
 import {Picker, FlatList, View, Modal} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import {connect} from 'react-redux'
@@ -85,7 +85,8 @@ class Score extends React.Component {
         <FlatList
           data={this.props.items}
           renderItem={({item}) => <ScoreItem {...item}/>}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.courseId}
+          ListEmptyComponent={<Text>暂无数据</Text>}
         />
         <TouchableRipple
           onPress={() => {

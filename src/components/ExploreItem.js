@@ -1,10 +1,11 @@
 import React from 'react'
-import {View, Image, ScrollView} from 'react-native'
+import {View, Image} from 'react-native'
+import {WIDTH} from '../config'
 
 const styles = {
   normalItem: {
     img: {
-      width: 375 / 3,
+      width: WIDTH / 3,
       height: 120,
     },
     root: {
@@ -18,7 +19,7 @@ const styles = {
   },
   comboItem: {
     img: {
-      width: 375 / 3,
+      width: WIDTH / 3,
       height: 120,
       padding: 0.5
     },
@@ -31,7 +32,7 @@ const styles = {
       marginRight: -0.5
     },
     bigImg: {
-      width: 375 / 3 * 2,
+      width: WIDTH / 3 * 2,
       height: 240,
     },
     bigImgContainer: {
@@ -44,9 +45,9 @@ const NormalItem = (props) => {
   return (
     <View style={styles.normalItem.root}>
       {
-        images.map(item => {
+        images.map((item, index) => {
           return (
-            <View style={styles.normalItem.imgContainer}>
+            <View style={styles.normalItem.imgContainer} key={index + item}>
               <Image source={item} style={styles.normalItem.img}/>
             </View>
           )
@@ -75,7 +76,6 @@ const ComboItem = (props) => {
 }
 const ExploreItem = (props) => {
   if ((props.index + 1) % 3 === 2 && props.data.img.length === 3) {
-    console.log(123)
     return <ComboItem items={props.data.img}/>
   } else {
     return <NormalItem items={props.data.img}/>

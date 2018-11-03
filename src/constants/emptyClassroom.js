@@ -59,8 +59,10 @@ export function fetchEmptyClassroom(date, time) {
         if (res.status === 0) {
           dispatch(requestSuccess())
           dispatch(receiveEmptyClassroom(res.data.items))
-        } else {
+        } else if (res.status === 1) {
           dispatch(requestFailed('服务器错误'))
+        } else {
+          dispatch(requestFailed('认证失效，请重新登陆'))
         }
       })
       .catch(err => {

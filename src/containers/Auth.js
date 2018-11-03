@@ -1,17 +1,18 @@
 import React from 'react'
-import {View, ImageBackground} from 'react-native'
+import {View, ImageBackground, AsyncStorage} from 'react-native'
 import {connect} from 'react-redux'
-import {TextInput, Button, Snackbar, Title, Colors} from 'react-native-paper'
+import {TextInput, Button, Snackbar, Title} from 'react-native-paper'
 import {login} from '../constants/login'
 import {withNavigation} from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import WithStore from './WithStore'
 import store from '../stores/login'
+import {WIDTH, HEIGHT} from '../config'
 
 const styles = {
   root: {
-    width: 375,
-    height: 672,
+    width: WIDTH,
+    height: HEIGHT,
     justifyContent: 'center'
   },
   form: {
@@ -43,16 +44,39 @@ class Auth extends React.Component {
     snackBarVisible: false,
     visible: false
   }
+  componentDidMount() {
+    setImmediate(async () => {
+      let username = await this._fetchUser()
+      this.setState({
+        username: username
+      })
+    })
+  }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.login) {
+      this._storeUser(this.state.username)
+      nextProps.navigation.navigate('Explore')
+    }
+    return true
+  }
   _handleTextChange = (name, value) => {
     this.setState({
       [name]: value
     })
   }
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.login) {
-      nextProps.navigation.navigate('Profile')
+  _storeUser = async (username) => {
+    try {
+      await AsyncStorage.setItem('username', username)
+    } catch (e) {
+      console.log(e)
     }
-    return true
+  }
+  _fetchUser = async () => {
+    try {
+      return await AsyncStorage.getItem('username')
+    } catch (e) {
+      console.log(e)
+    }
   }
   _login = () => {
     const {dispatch} = this.props
@@ -114,12 +138,13 @@ class Auth extends React.Component {
   }
 }
 const mapStateToProps = (state) => {
-  const {loading, error, errMessage, login} = state
+  const {loading, error, errMessage, login, data} = state
   return {
     loading: loading,
     error: error,
     errMessage: errMessage,
-    login: login
+    login: login,
+    data: data
   }
 }
 export default WithStore(connect(mapStateToProps)(withNavigation(Auth)), store)
